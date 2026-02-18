@@ -1,0 +1,68 @@
+{
+  "name": "react-triage",
+  "version": "0.1.0",
+  "description": "Blazing-fast React & Next.js project health checker",
+  "author": "Bastiaan Steinmeier",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/basst85/react-triage.git"
+  },
+  "homepage": "https://github.com/basst85/react-triage#readme",
+  "bugs": {
+    "url": "https://github.com/basst85/react-triage/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "bin": {
+    "react-triage": "./dist/index.js"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun --packages=external && chmod +x dist/index.js",
+    "start": "bun run src/index.ts .",
+    "triage": "bun run src/index.ts",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "prepublishOnly": "bun run typecheck && bun run build",
+    "typecheck": "bun x tsc --noEmit"
+  },
+  "keywords": [
+    "react",
+    "nextjs",
+    "linter",
+    "oxlint",
+    "triage",
+    "health-check",
+    "bun",
+    "cli",
+    "devtools",
+    "dx",
+    "developer-experience",
+    "static-analysis",
+    "code-quality",
+    "performance",
+    "best-practices",
+    "security"
+  ],
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.0.1",
+    "cli-table3": "^0.6.5",
+    "oxlint": "^1.48.0",
+    "picocolors": "^1.1.1"
+  }
+}
