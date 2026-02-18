@@ -107,6 +107,14 @@ npm install -g react-triage
 bunx react-triage
 ```
 
+## Add as skill for your AI Agent
+```bash
+bun skills add basst85/react-triage
+
+# Or via npm
+npx skills add basst85/react-triage
+```
+
 ## Usage
 
 ```bash
