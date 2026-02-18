@@ -1,9 +1,9 @@
 ---
-name: react-triage-maintainer
+name: react-triage
 description: Maintain and extend the React Triage Bun CLI that scans React/Next.js projects with Oxlint, custom checks, Vercel best-practice rules, and security auditing. Use this skill when modifying scan logic, adding diagnostics, adjusting scoring, updating CLI/report output, or debugging Bun-based project analysis behavior.
 ---
 
-# React Triage Maintainer
+# React Triage
 
 Maintain and operate React Triage to scan React/Next.js projects, export actionable diagnostics, and manage report files.
 
