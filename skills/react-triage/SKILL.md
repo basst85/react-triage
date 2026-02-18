@@ -7,6 +7,18 @@ description: Maintain and extend the React Triage Bun CLI that scans React/Next.
 
 Maintain and operate React Triage to scan React/Next.js projects, export actionable diagnostics, and manage report files.
 
+## Installation
+
+```bash
+bun add -g react-triage
+```
+
+or with npm:
+
+```bash
+npm install -g react-triage
+```
+
 ## Usage
 
 ```bash
