@@ -96,4 +96,5 @@ export interface CliOptions {
   showAll: boolean;
   toMarkdown: string | null;
   severityFilter: Set<Severity>;
+  failOn: Severity | null;
 }

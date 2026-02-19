@@ -12,10 +12,27 @@ import { intro, spinner } from "@clack/prompts";
 import pc from "picocolors";
 import { resolve } from "path";
 import { diagnose } from "./diagnosis";
+import { evaluateFailOnPolicy } from "./policy";
 import { exportToMarkdown, showDashboard } from "./reporter";
 import type { CliOptions, Severity } from "./types";
 
 const args = process.argv.slice(2);
+const validSeverities: Severity[] = ["critical", "performance", "best-practice", "info"];
+
+function parseOptionValue(flagName: string): string | null {
+  const prefixedArg = args.find((arg) => arg.startsWith(`${flagName}=`));
+  if (prefixedArg) {
+    return prefixedArg.slice(flagName.length + 1);
+  }
+
+  const index = args.indexOf(flagName);
+  if (index === -1) return null;
+
+  const next = args[index + 1];
+  if (!next || next.startsWith("--")) return "";
+
+  return next;
+}
 
 // Help flag
 if (args.includes("--help") || args.includes("-h")) {
@@ -33,6 +50,7 @@ ${pc.bold("Options:")}
   ${pc.cyan("--critical")}                Show only critical issues
   ${pc.cyan("--performance")}             Show only performance issues
   ${pc.cyan("--best-practices")}          Show only best-practice issues
+  ${pc.cyan("--fail-on <severity>")}      Exit with code 1 if findings match severity
 
   Severity filters can be combined:
     ${pc.dim("react-triage --critical --performance")}
@@ -71,11 +89,36 @@ if (args.includes("--best-practices")) {
 
 const markdownArg = args.find((arg) => arg.startsWith("--to-markdown="));
 const toMarkdown = markdownArg ? markdownArg.slice("--to-markdown=".length) : null;
+const failOnRaw = parseOptionValue("--fail-on");
+
+let failOn: Severity | null = null;
+if (failOnRaw !== null) {
+  if (!failOnRaw) {
+    console.error(
+      pc.red(
+        `\n  ✖ Missing value for --fail-on. Use one of: ${validSeverities.join(", ")}\n`
+      )
+    );
+    process.exit(1);
+  }
+
+  if (!validSeverities.includes(failOnRaw as Severity)) {
+    console.error(
+      pc.red(
+        `\n  ✖ Invalid --fail-on value "${failOnRaw}". Use one of: ${validSeverities.join(", ")}\n`
+      )
+    );
+    process.exit(1);
+  }
+
+  failOn = failOnRaw as Severity;
+}
 
 const cliOptions: CliOptions = {
   showAll: args.includes("--show-all"),
   toMarkdown,
   severityFilter,
+  failOn,
 };
 
 // Target path (default: current directory) — first arg that doesn't start with --
@@ -111,6 +154,27 @@ try {
     const mdPath = resolve(cliOptions.toMarkdown);
     await exportToMarkdown(result, mdPath, cliOptions);
     console.log(pc.green(`\n  📄 Report exported to ${mdPath}\n`));
+  }
+
+  const failOnPolicy = evaluateFailOnPolicy(result, cliOptions.failOn);
+  if (failOnPolicy?.shouldFail) {
+    const severitySummary = [
+      `critical: ${failOnPolicy.matchedBySeverity.critical}`,
+      `performance: ${failOnPolicy.matchedBySeverity.performance}`,
+      `best-practice: ${failOnPolicy.matchedBySeverity["best-practice"]}`,
+      `info: ${failOnPolicy.matchedBySeverity.info}`,
+    ].join(", ");
+
+    console.error(
+      pc.red(
+        `\n  ✖ Exit policy failed (--fail-on=${failOnPolicy.failOn}).\n` +
+          `    This policy fails only on severity: ${failOnPolicy.failOn}\n` +
+          `    Matched findings: ${failOnPolicy.totalMatches}\n` +
+          `    By severity: ${severitySummary}\n` +
+          `    By source: issues=${failOnPolicy.issueMatches}, dependencies=${failOnPolicy.dependencyMatches}, security=${failOnPolicy.vulnerabilityMatches}\n`
+      )
+    );
+    process.exit(1);
   }
 } catch (error) {
   spin.stop("Scan failed.");

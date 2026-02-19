@@ -135,6 +135,10 @@ react-triage --critical
 react-triage --critical --performance
 react-triage --best-practices
 
+# Exit non-zero when findings match a policy severity
+react-triage --fail-on critical
+react-triage --fail-on performance
+
 # Help / version
 react-triage --help
 react-triage --version
@@ -149,6 +153,7 @@ react-triage --version
 | `--critical` | Show only critical issues |
 | `--performance` | Show only performance issues |
 | `--best-practices` | Show only best-practice issues |
+| `--fail-on <severity>` | Exit with code 1 if findings match severity (`critical`, `performance`, `best-practice`, `info`) |
 | `--help`, `-h` | Show help |
 | `--version`, `-v` | Show version |
 
