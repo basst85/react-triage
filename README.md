@@ -6,7 +6,7 @@
 
 Blazing-fast React & Next.js project health checker.
 
-Scans your codebase with Rust-native analysis, 29 Vercel best-practice rules, a security audit, and dependency health checks. All in a single command.
+Scans your codebase with Rust-native analysis, 29 Vercel best-practice rules, a security audit, and dependency health checks (including unused package detection). All in a single command.
 
 ## What it checks
 
@@ -15,7 +15,7 @@ Scans your codebase with Rust-native analysis, 29 Vercel best-practice rules, a 
 | 🚨 **Critical** | Hooks violations, async client components, state mutations |
 | 🚀 **Performance** | Unnecessary re-renders, missing optimizations, slow patterns |
 | 💡 **Best Practices** | Next.js patterns, accessibility, client/server component ratio |
-| 📦 **Dependencies** | Version mismatches, duplicates, dev packages in production |
+| 📦 **Dependencies** | Version mismatches, duplicates, dev packages in production, unused dependencies/devDependencies |
 | 🔒 **Security** | Known CVEs via `bun audit` (npm advisory database) |
 | ⚙️ **Config** | tsconfig.json strictness, JSX transform, TS target |
 | 📏 **Large Files** | Files over 400 lines. Candidates for refactoring |

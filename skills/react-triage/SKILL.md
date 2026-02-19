@@ -54,3 +54,4 @@ Use these commands to run the tool, export a Markdown report, read it, and remov
 - **Custom Checks**: Implement custom logic for React/Next.js patterns.
 - **Vercel Best Practices**: Enforce Vercel deployment guidelines.
 - **Security Auditing**: Identify potential security issues in the codebase.
+- **Unused Packages**: Detect and report unused dependencies in package.json.

@@ -27,7 +27,7 @@ export interface ProjectStats {
 }
 
 export interface DependencyIssue {
-  type: "version-mismatch" | "dev-in-prod" | "duplicate" | "outdated";
+  type: "version-mismatch" | "dev-in-prod" | "duplicate" | "outdated" | "unused";
   message: string;
   severity: Severity;
 }
