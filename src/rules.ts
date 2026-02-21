@@ -47,6 +47,29 @@ export const PERFORMANCE_RULES = new Set([
   "jsx-no-constructed-context-values",
 ]);
 
+// ── jsx-a11y: Accessibility (WCAG) rules ──────────────────────────
+//
+// Exported separately so --a11y can filter to only these rules.
+export const A11Y_RULES = new Set([
+  "alt-text",                        // Missing alt on <img>, <area>, <input type=image>
+  "anchor-has-content",              // Empty <a> tags
+  "anchor-is-valid",                 // Invalid href on <a>
+  "aria-role",                       // Invalid ARIA role value
+  "aria-props",                      // Invalid ARIA attribute names
+  "aria-proptypes",                  // Invalid ARIA attribute values
+  "click-events-have-key-events",    // onClick without keyboard equivalent
+  "heading-has-content",             // Empty heading elements
+  "html-has-lang",                   // <html> missing lang attribute
+  "label-has-associated-control",    // <label> not linked to a form control
+  "mouse-events-have-key-events",    // onMouseOver/Out without keyboard equivalent
+  "no-aria-hidden-on-focusable",     // aria-hidden on focusable elements
+  "no-noninteractive-tabindex",      // tabIndex on non-interactive elements
+  "no-static-element-interactions",  // Interactive handlers on <div>/<span> etc.
+  "role-has-required-aria-props",    // ARIA roles missing required attributes
+  "scope",                           // scope attribute only valid on <th>
+  "tabindex-no-positive",            // tabIndex > 0 breaks natural focus order
+]);
+
 export const BEST_PRACTICE_RULES = new Set([
   "no-html-link-for-pages",
   "jsx-no-target-blank",
@@ -69,6 +92,8 @@ export const BEST_PRACTICE_RULES = new Set([
   "no-head-import-in-document",
   "no-styled-jsx-in-document",
   "no-duplicate-head",
+  // jsx-a11y rules are included via A11Y_RULES spread
+  ...A11Y_RULES,
 ]);
 
 /**

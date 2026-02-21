@@ -6,7 +6,7 @@
 
 Blazing-fast React & Next.js project health checker.
 
-Scans your codebase with Rust-native analysis, 29 Vercel best-practice rules, a security audit, and dependency health checks (including unused package detection). All in a single command.
+Scans your codebase with Rust-native analysis, 29 Vercel best-practice rules, a security audit, accessibility checks (WCAG via jsx-a11y), and dependency health checks (including unused package detection). All in a single command.
 
 ## What it checks
 
@@ -14,7 +14,8 @@ Scans your codebase with Rust-native analysis, 29 Vercel best-practice rules, a 
 |---|---|
 | 🚨 **Critical** | Hooks violations, async client components, state mutations |
 | 🚀 **Performance** | Unnecessary re-renders, missing optimizations, slow patterns |
-| 💡 **Best Practices** | Next.js patterns, accessibility, client/server component ratio |
+| ♿ **Accessibility** | Missing alt text, invalid ARIA roles, keyboard access, empty headings (WCAG 2.1) |
+| 💡 **Best Practices** | Next.js patterns, composition, client/server component ratio |
 | 📦 **Dependencies** | Version mismatches, duplicates, dev packages in production, unused dependencies/devDependencies |
 | 🔒 **Security** | Known CVEs via `bun audit` (npm advisory database) |
 | ⚙️ **Config** | tsconfig.json strictness, JSX transform, TS target |
@@ -135,6 +136,9 @@ react-triage --critical
 react-triage --critical --performance
 react-triage --best-practices
 
+# Show only accessibility issues
+react-triage --a11y
+
 # Exit non-zero when findings match a policy severity
 react-triage --fail-on critical
 react-triage --fail-on performance
@@ -153,6 +157,7 @@ react-triage --version
 | `--critical` | Show only critical issues |
 | `--performance` | Show only performance issues |
 | `--best-practices` | Show only best-practice issues |
+| `--a11y` | Show only accessibility issues (WCAG / jsx-a11y) |
 | `--fail-on <severity>` | Exit with code 1 if findings match severity (`critical`, `performance`, `best-practice`, `info`) |
 | `--help`, `-h` | Show help |
 | `--version`, `-v` | Show version |

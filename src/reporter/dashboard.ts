@@ -15,6 +15,7 @@ import {
   createLink,
   vulnSeverityBadge,
 } from "./format";
+import { A11Y_RULES } from "../rules";
 
 // ── Vitals Table ───────────────────────────────────────────────────
 
@@ -239,7 +240,13 @@ function renderSecurityAudit(result: ScanResult): void {
 export function showDashboard(result: ScanResult, options?: CliOptions): void {
   const showAll = options?.showAll ?? false;
   const filter = options?.severityFilter;
+  const a11yOnly = options?.a11yOnly ?? false;
   const maxPerCategory = showAll ? Infinity : 5;
+
+  // Pre-filter issues when --a11y is active
+  const baseIssues = a11yOnly
+    ? result.issues.filter((i) => A11Y_RULES.has(i.rule))
+    : result.issues;
 
   console.clear();
   intro(pc.bgCyan(pc.black(" ⚛️  REACT TRIAGE ")));
@@ -270,19 +277,25 @@ export function showDashboard(result: ScanResult, options?: CliOptions): void {
   // Code issues
   const hasFilter = filter && filter.size > 0;
   const filteredIssues = hasFilter
-    ? result.issues.filter((i) => filter.has(i.severity))
-    : result.issues;
+    ? baseIssues.filter((i) => filter.has(i.severity))
+    : baseIssues;
 
   if (filteredIssues.length > 0) {
+    const totalLabel = a11yOnly ? `${result.issues.length} total` : String(result.issues.length);
     const countLabel = hasFilter
-      ? `${filteredIssues.length} of ${result.issues.length}`
+      ? `${filteredIssues.length} of ${totalLabel}`
+      : a11yOnly
+      ? `${filteredIssues.length} accessibility issue${filteredIssues.length !== 1 ? "s" : ""} (of ${totalLabel})`
       : String(filteredIssues.length);
     log.warning(
-      pc.yellow(`⚠️  Found ${countLabel} issue${filteredIssues.length !== 1 ? "s" : ""}`)
+      pc.yellow(`⚠️  Found ${countLabel} issue${filteredIssues.length !== 1 && !a11yOnly ? "s" : ""}`)
     );
-    renderIssues(result.issues, maxPerCategory, filter);
+    renderIssues(baseIssues, maxPerCategory, filter);
   } else {
-    log.success(pc.green("No issues found. Your project is healthy! 🍎"));
+    const msg = a11yOnly
+      ? pc.green("No accessibility issues found. ♿️")
+      : pc.green("No issues found. Your project is healthy! 🍎");
+    log.success(msg);
   }
 
   // Large files

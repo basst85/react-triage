@@ -50,6 +50,7 @@ ${pc.bold("Options:")}
   ${pc.cyan("--critical")}                Show only critical issues
   ${pc.cyan("--performance")}             Show only performance issues
   ${pc.cyan("--best-practices")}          Show only best-practice issues
+  ${pc.cyan("--a11y")}                    Show only accessibility issues (jsx-a11y)
   ${pc.cyan("--fail-on <severity>")}      Exit with code 1 if findings match severity
 
   Severity filters can be combined:
@@ -58,7 +59,8 @@ ${pc.bold("Options:")}
 ${pc.bold("What it checks:")}
   ${pc.red("🚨 Critical")}      Hooks violations, async client components, crashes
   ${pc.yellow("🚀 Performance")}   Unnecessary re-renders, missing optimizations
-  ${pc.blue("💡 Best Practices")} Next.js patterns, security, accessibility
+  ${pc.blue("💡 Best Practices")} Next.js patterns, composition, tsconfig
+  ${pc.cyan("♿  Accessibility")}  Missing alt text, invalid ARIA, keyboard access (jsx-a11y)
   ${pc.dim("📦 Dependencies")}   Version mismatches, duplicates, misplaced packages
   ${pc.red("🔒 Security")}      Known vulnerabilities via ${pc.cyan("bun audit")}
   ${pc.dim("⚙️  Config")}        tsconfig.json settings, JS/TS target
@@ -119,6 +121,7 @@ const cliOptions: CliOptions = {
   toMarkdown,
   severityFilter,
   failOn,
+  a11yOnly: args.includes("--a11y"),
 };
 
 // Target path (default: current directory) — first arg that doesn't start with --

@@ -51,6 +51,7 @@ Use these commands to run the tool, export a Markdown report, read it, and remov
 
 ## Rules
 - **Oxlint Checks**: Run Oxlint for code quality and best practices.
+- **Accessibility Checks**: WCAG 2.1 violations via the jsx-a11y plugin (missing alt text, invalid ARIA roles, keyboard accessibility, empty headings, unlabelled form controls).
 - **Custom Checks**: Implement custom logic for React/Next.js patterns.
 - **Vercel Best Practices**: Enforce Vercel deployment guidelines.
 - **Security Auditing**: Identify potential security issues in the codebase.

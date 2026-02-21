@@ -4,6 +4,7 @@
 // saving to disk or pasting into an issue tracker.
 
 import type { CliOptions, ScanResult, Severity } from "../types";
+import { A11Y_RULES } from "../rules";
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -50,6 +51,12 @@ export async function exportToMarkdown(
 ): Promise<void> {
   const filter = options?.severityFilter;
   const hasFilter = filter && filter.size > 0;
+  const a11yOnly = options?.a11yOnly ?? false;
+
+  // Pre-filter issues when --a11y is active
+  const baseIssues = a11yOnly
+    ? result.issues.filter((i) => A11Y_RULES.has(i.rule))
+    : result.issues;
   const lines: string[] = [];
 
   lines.push("# React Triage Report");
@@ -60,6 +67,10 @@ export async function exportToMarkdown(
   lines.push(`| Scan Time | ${result.timeTaken}ms |`);
   lines.push(`| Files Scanned | ${result.stats.totalFiles} |`);
   lines.push(`| Total Issues | ${result.issues.length} |`);
+  if (a11yOnly) {
+    const a11yCount = result.issues.filter((i) => A11Y_RULES.has(i.rule)).length;
+    lines.push(`| Accessibility Issues | ${a11yCount} |`);
+  }
   lines.push(`| Vulnerabilities | ${result.securityAudit.summary.total} |`);
   lines.push("");
 
@@ -71,7 +82,7 @@ export async function exportToMarkdown(
       continue;
     }
 
-    const group = result.issues.filter((issue) => issue.severity === severity);
+    const group = baseIssues.filter((issue) => issue.severity === severity);
     if (group.length === 0) {
       continue;
     }

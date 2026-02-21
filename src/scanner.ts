@@ -43,6 +43,7 @@ function buildOxlintArgs(targetPath: string): string[] {
     "--react-plugin",
     "--nextjs-plugin",
     "--react-perf-plugin",
+    "--jsx-a11y-plugin",
     // Enable rule categories
     "-D",
     "correctness",
